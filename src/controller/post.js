@@ -1,27 +1,52 @@
-import postModal from "../model/post.js";
+import postModel from "../model/post.js";
 
 const postController = {
   getAll: async (req, res) => {
-    const posts = await postModal.find();
+    const posts = await postModel.find().populate("user_id");
     return res.json(posts);
   },
-  getSingle: (req, res) => {
-    const posts = postModal.findById();
-    return res.json(posts);
+  getSingle: async (req, res) => {
+    const { id } = req.params;
+    const post = await postModel.findById(id).populate("user_id");
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+    return res.json(post);
   },
   create: async (req, res) => {
-    const name = req.body.name;
-    const posts = await postModal.create({ name });
+    const body = req.body;
+    const post = await postModel.create({
+      title: body.title,
+      description: body.description,
+      user_id: body.user_id,
+    });
 
-    return res.json({ message: "Student created", posts });
+    return res.json({ message: "Post created", post });
   },
-  update: (req, res) => {
-    console.log(req.body);
-    return res.json({ message: "This is post request" });
+  update: async (req, res) => {
+    const { id } = req.params;
+    const post = await postModel.findById(id).populate("user_id");
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+    const body = req.body;
+    const updatedPost = await postModel.create({
+      title: body.title,
+      description: body.description,
+      user_id: body.user_id,
+    });
+
+    return res.json({ message: "Post updated", updatedPost });
   },
-  delete: (req, res) => {
-    console.log(req.body);
-    return res.json({ message: "This is post request" });
+  delete: async (req, res) => {
+    const { id } = req.params;
+    const post = await postModel.findById(id).populate("user_id");
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+    const delPost = await userModel.delete({ post });
+
+    return res.json({ message: "post deleted", delPost });
   },
 };
 

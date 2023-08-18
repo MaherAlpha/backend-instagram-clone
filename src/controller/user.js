@@ -1,28 +1,50 @@
-import userModal from "../model/user.js";
+import userModel from "../model/user.js";
 
 const userController = {
   getAll: async (req, res) => {
-    const users = await userModal.find();
+    const users = await userModel.find();
     return res.json(users);
   },
-  getSingle: (req, res) => {
-    const users = userModal.findById();
-    return res.json(users);
+  getSingle: async (req, res) => {
+    const { id } = req.params;
+    const user = await userModel.findById(id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    return res.json(user);
   },
   create: async (req, res) => {
-    const name = req.body.name;
-    const users = await userModal.create({ name });
+    const body = req.body;
+    const user = await userModel.create({
+      name: body.name,
+      email: body.email,
+    });
 
-    return res.json({ message: "Student created", users });
+    return res.json({ message: "User created", user });
   },
-  update: (req, res) => {
-    console.log(req.body);
-    return res.json({ message: "This is post request" });
+  update: async (req, res) => {
+    const body = req.body;
+    const id = req.params.id;
+    const user = await userModel.findById(id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    user.name = body.name;
+    user.email = body.email;
+
+    await user.save();
+    return res.json({ message: "User Updated", user });
   },
-  delete: (req, res) => {
-    console.log(req.body);
-    return res.json({ message: "This is post request" });
-  },
+  delete: async (req, res) => {
+    const id = req.params.id;
+    const user = await userModel.findById(id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    const delUser = await userModel.delete({ user });
+
+    return res.json({ message: "User deleted", delUser });
+  }
 };
 
 export default userController;
