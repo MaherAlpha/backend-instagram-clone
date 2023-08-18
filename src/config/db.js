@@ -1,7 +1,9 @@
 import mongoose from "mongoose";
 
+
 const connectDB = async () => {
-  const uri = "mongodb://127.0.0.1:27017/instagramApp";
+  const mongooseUrl=process.env.MONGOOSE_DB_URL
+  const uri = mongooseUrl;
   mongoose
     .connect(uri, {
       autoCreate: true,

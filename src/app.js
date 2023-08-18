@@ -1,5 +1,8 @@
+import dotenv from "dotenv";
+dotenv.config();
+// when ever you change env you restart the server
 import express from "express";
-import router from "./router/student.js";
+import router from "./router/index.js";
 import connectDB from "./config/db.js";
 const app = express();
 // connecting db
@@ -11,6 +14,7 @@ app.get("/", (req, res) => {
 });
 
 app.use(router);
-app.listen(3322, () => {
-  console.log("listening on 3322");
+const port =process.env.PORT
+app.listen(port, () => {
+  console.log("Backend Listening...! ");
 });

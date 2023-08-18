@@ -41,7 +41,7 @@ const userController = {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    const delUser = await userModel.delete({ user });
+    const delUser = await userModel.deleteOne({ user });
 
     return res.json({ message: "User deleted", delUser });
   }

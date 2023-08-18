@@ -44,7 +44,7 @@ const postController = {
     if (!post) {
       return res.status(404).json({ message: "Post not found" });
     }
-    const delPost = await userModel.delete({ post });
+    const delPost = await postModel.deleteOne({ post });
 
     return res.json({ message: "post deleted", delPost });
   },
