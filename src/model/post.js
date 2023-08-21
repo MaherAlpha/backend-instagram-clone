@@ -29,7 +29,7 @@ const postSchema = new mongoose.Schema(
     ],
     user_id: {
       type: mongoose.Schema.ObjectId, 
-      ref: "user",
+      ref: "users",
     },
   },
   { timestamps: true }
