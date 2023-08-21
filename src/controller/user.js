@@ -5,9 +5,9 @@ const userController = {
   getAll: async (req, res) => {
     try {
       // pagination concept of limit and skip
-      const limitValue = req.query.limit || 1;
       const skipValue = req.query.skip || 0;
-      const users = await userModel.find().limit(limitValue).skip(skipValue);
+      const limitValue = req.query.limit || 1;
+      const users = await userModel.find().skip(skipValue).limit(limitValue);
       return res.status(200).json(users);
     } catch (error) {
       console.log(error);

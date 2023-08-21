@@ -5,9 +5,12 @@ const postController = {
   getAll: async (req, res) => {
     try {
       // pagination concept of limit and skip
-      const limitValue = req.query.limit || 1;
+      // skip((pageNo-1)*limit).limit(limit)
+      //
+      //
       const skipValue = req.query.skip || 0;
-      const posts = await postModel.find().populate("user_id").limit(limitValue).skip(skipValue);
+      const limitValue = req.query.limit || 1;
+      const posts = await postModel.find().populate("user_id").skip(skipValue).limit(limitValue);
       return res.status(200).json(posts);
     } catch (error) {
       console.log(error)

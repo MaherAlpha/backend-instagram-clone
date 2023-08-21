@@ -34,7 +34,9 @@ const authController = {
       // Create a JWT token
       ;
       const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY, {
-        expiresIn: 86400, // 24 hours in seconds
+        expiresIn: 86400,
+        
+        // 24 hours in seconds
       });
    
       return res.status(200).json({
