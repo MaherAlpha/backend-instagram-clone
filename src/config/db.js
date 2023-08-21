@@ -8,6 +8,8 @@ const connectDB = async () => {
     .connect(uri, {
       autoCreate: true,
       autoIndex: true,
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
     })
     .then((res) => {
       console.log("Connected db connection");

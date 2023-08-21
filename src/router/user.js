@@ -7,4 +7,5 @@ userRouter.get("/user/:id", userController.getSingle);
 userRouter.post("/user", userController.create);
 userRouter.put("/user/:id", userController.update);
 userRouter.delete("/user/:id", userController.delete);
+userRouter.get("/user/:id",userController.userOwnedPost);
 export default userRouter;

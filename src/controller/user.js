@@ -1,49 +1,92 @@
+import postModel from "../model/post.js";
 import userModel from "../model/user.js";
 
 const userController = {
   getAll: async (req, res) => {
-    const users = await userModel.find();
-    return res.json(users);
+    try {
+      const users = await userModel.find();
+      return res.status(200).json(users);
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({error:"Eror while fetching"});
+      
+    }
   },
   getSingle: async (req, res) => {
-    const { id } = req.params;
-    const user = await userModel.findById(id);
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
+    try {
+      const { id } = req.params;
+      const user = await userModel.findById(id);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      return res.status(200).json(user);
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({error:"Error while fetching"})
     }
-    return res.json(user);
   },
   create: async (req, res) => {
-    const body = req.body;
-    const user = await userModel.create({
-      name: body.name,
-      email: body.email,
-    });
-
-    return res.json({ message: "User created", user });
+    try {
+      const body = req.body;
+      const user = await userModel.create({
+        name: body.name,
+        email: body.email,
+        password: body.password
+      });
+      return res.status(200).json({ message: "User created", user });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({error:"Error while creating"})
+    }
   },
   update: async (req, res) => {
-    const body = req.body;
-    const id = req.params.id;
-    const user = await userModel.findById(id);
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
+    try {
+      const body = req.body;
+      const id = req.params.id;
+      const user = await userModel.findById(id);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      user.name = body.name;
+      user.email = body.email;
+      user.password = body.password
+  
+      await user.save();
+      return res.status(200).json({ message: "User Updated", user });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({error:"Error while updating"})
     }
-    user.name = body.name;
-    user.email = body.email;
-
-    await user.save();
-    return res.json({ message: "User Updated", user });
   },
   delete: async (req, res) => {
-    const id = req.params.id;
-    const user = await userModel.findById(id);
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
+    try {
+      const id = req.params.id;
+      const user = await userModel.findById(id);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      const delUser = await userModel.deleteOne({ user });
+  
+      return res.json({ message: "User deleted", delUser });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({error:"Error While deleting"})
     }
-    const delUser = await userModel.deleteOne({ user });
+  },
+  userOwnedPost: async(req,res)=>{
+    try { 
+      const id = req.params.id;
+      const user = await userModel.findById(id);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      const userPosts = await postModel.findById(id).populate("user_id")
+      return res.status(200).json({ message: "User owned posts displayed!", userPosts });
+    } catch (error) {
+      console.log(error)
+      return res.status(500).json({error:"Error while fetching!"})
+    }
 
-    return res.json({ message: "User deleted", delUser });
   }
 };
 

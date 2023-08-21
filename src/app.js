@@ -14,7 +14,7 @@ app.get("/", (req, res) => {
 });
 
 app.use(router);
-const port =process.env.PORT
+const port =process.env.PORT || 3323;
 app.listen(port, () => {
   console.log("Backend Listening...! ");
 });

@@ -28,13 +28,12 @@ const postSchema = new mongoose.Schema(
       },
     ],
     user_id: {
-      type: mongoose.Schema.ObjectId,
+      type: mongoose.Schema.ObjectId, 
       ref: "user",
     },
   },
   { timestamps: true }
 );
-
-const postModel = mongoose.model("post", postSchema);
+const postModel = mongoose.model("posts", postSchema);
 
 export default postModel;
