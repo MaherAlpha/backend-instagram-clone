@@ -1,6 +1,9 @@
 import userModel from "../model/user.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import loginEmail from "../email/auth/loginMail.js";
+import dotenv from "dotenv";
+dotenv.config();
 
 const authController = {
   register: async (req, res) => {
@@ -38,7 +41,7 @@ const authController = {
         
         // 24 hours in seconds
       });
-   
+      loginEmail(user.name, user.email);
       return res.status(200).json({
         message:"User Successfully Logged In!",
         accessToken: token,
