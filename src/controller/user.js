@@ -104,13 +104,11 @@ const userController = {
   delete: async (req, res) => {
     try {
       const id = req.params.id;
-      const user = await userModel.findById(id);
+      const user = await userModel.findByIdAndDelete(id);
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }
-      const delUser = await userModel.deleteOne({ user });
-
-      return res.json({ message: "User deleted", delUser });
+      return res.status(200).json({ message: "User deleted", user });
     } catch (error) {
       console.log(error);
       return res.status(500).json({ error: "Error While deleting" });
